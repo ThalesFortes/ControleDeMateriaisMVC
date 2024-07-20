@@ -69,7 +69,8 @@ namespace ControleDeMateriaisMVC.Controllers
         //}
 
         public IActionResult Privacy()
-        {
+        { 
+
             return View();
         }
 

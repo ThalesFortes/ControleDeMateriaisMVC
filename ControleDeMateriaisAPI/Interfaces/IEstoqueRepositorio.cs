@@ -8,5 +8,6 @@ namespace ControleDeMateriaisAPI.Interfaces
         Task<Estoque> BuscaEstoquePorId(int idEstoque);
         Task<bool> CadastrarEstoque(Estoque estoque);
         Task<bool> AtualizarEstoque(Estoque estoque);
+        Task<bool> DeletarEstoque(Estoque estoque);
     }
 }

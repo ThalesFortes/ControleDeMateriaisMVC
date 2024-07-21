@@ -61,5 +61,19 @@ namespace ControleDeMateriaisAPI.Controllers
             }
         }
 
+        [HttpDelete ("/deletarEstoque")]
+        public async Task<bool> DeletarEstoque (Estoque estoque)
+        {
+            try
+            {
+                var delete = await _estoque.DeletarEstoque(estoque);
+                return delete;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
     }
 }

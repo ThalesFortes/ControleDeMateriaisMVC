@@ -53,5 +53,24 @@ namespace ControleDeMateriaisAPI.Repositories
                 return false;
             }
         }
+
+        public async Task<bool> DeletarEstoque(Estoque estoque)
+        {
+            try
+            {
+                var deleteEstoque = await _context.Estoques.FirstOrDefaultAsync(x => x.IdEstoque == estoque.IdEstoque);
+                if (deleteEstoque == null)
+                {
+                    return false;
+                }
+                _context.Estoques.Remove(deleteEstoque);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
     }
 }

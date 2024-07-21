@@ -14,6 +14,11 @@ builder.Services.AddDbContext<ControleDeMateriaisContext>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IEstoqueRepositorio, EstoqueRepositorio>();
+builder.Services.AddScoped<IProdutoRepositorio, ProdutoRepositorio>();
+builder.Services.AddScoped<IServicoRepositorio, ServicoRepositorio>();
+builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
+builder.Services.AddScoped<IFornecedorRepositorio, FornecedorRepositorio>();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

@@ -11,7 +11,7 @@ namespace ControleDeMateriaisAPI.Models
         public string? CodigoEAN { get; set; }
         public decimal PrecoUnitario { get; set; }
         public int CotaMinimaEstoque { get; set; }
-        public string? Status { get; set; }
+        public bool? Status { get; set; }
         public DateTime DataCadastro { get; set; }
         public int IdFornecedor { get; set; }
         public virtual Fornecedor Fornecedor { get; set; }

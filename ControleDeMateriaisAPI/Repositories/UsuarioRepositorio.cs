@@ -5,29 +5,30 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ControleDeMateriaisAPI.Repositories
 {
-    public class ProdutoRepositorio : IProdutoRepositorio
+    public class UsuarioRepositorio : IUsuarioRepositorio
+
     {
         private readonly ControleDeMateriaisContext _context;
-
-        public ProdutoRepositorio(ControleDeMateriaisContext context)
+        public UsuarioRepositorio(ControleDeMateriaisContext context)
         {
             _context = context;
         }
 
-        public async Task<IEnumerable<Produto>> ListaProduto()
+        public async Task<IEnumerable<Usuario>> ListaUsuario()
         {
-            return await _context.Produtos.ToListAsync();
+            return await _context.Usuarios.ToListAsync();
         }
-        public async Task<Produto> BuscaProdutoPorId(int idProduto)
+        public async Task<Usuario> BuscarUsuarioPorId(int idUsuario)
         {
-            var produto = await _context.Produtos.FirstOrDefaultAsync(x => x.IdProduto == idProduto);
-            return produto;
+            var usuario = await _context.Usuarios.FirstOrDefaultAsync(x => x.Matricula == idUsuario);
+            return usuario;
         }
-        public async Task<bool> CadastrarProduto(Produto produto)
+
+        public async Task<bool> CadastrarUsuario(Usuario usuario)
         {
             try
             {
-                _context.Add(produto);
+                _context.Add(usuario);
                 await _context.SaveChangesAsync();
                 return true;
             }
@@ -36,16 +37,16 @@ namespace ControleDeMateriaisAPI.Repositories
                 return false;
             }
         }
-        public async Task<bool> AtualizarProduto(Produto produto)
+        public async Task<bool> AtualizarUsuario(Usuario usuario)
         {
             try
             {
-                var findProduto = await _context.Produtos.FirstOrDefaultAsync(x => x.IdProduto == produto.IdProduto);
-                if (findProduto == null)
+                var findUsuario = await _context.Usuarios.FirstOrDefaultAsync(x => x.Matricula == usuario.Matricula);
+                if (findUsuario == null)
                 {
                     return false;
                 }
-                _context.Add(produto);
+                _context.Add(usuario);
                 await _context.SaveChangesAsync();
                 return true;
             }
@@ -55,17 +56,17 @@ namespace ControleDeMateriaisAPI.Repositories
             }
         }
 
-        public async Task<bool> DeletarProduto(Produto produto)
+        public async Task<bool> DeletarUsuario(Usuario usuario)
         {
             try
             {
-                var deleteProduto = await _context.Produtos.FirstOrDefaultAsync(x => x.IdProduto == produto.IdProduto);
-                if (deleteProduto == null)
+                var deleteUsuario = await _context.Usuarios.FirstOrDefaultAsync(x => x.Matricula == usuario.Matricula);
+                if (deleteUsuario == null)
                 {
                     return false;
                 }
-                deleteProduto.Status = false;
-                _context.Produtos.Update(deleteProduto);
+                deleteUsuario.Status = false;
+                _context.Usuarios.Update(deleteUsuario);
                 await _context.SaveChangesAsync();
                 return true;
             }
@@ -76,5 +77,6 @@ namespace ControleDeMateriaisAPI.Repositories
         }
 
     }
-    
+
 }
+

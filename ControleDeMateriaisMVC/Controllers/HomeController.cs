@@ -6,16 +6,16 @@ namespace ControleDeMateriaisMVC.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-        private readonly string _api = "https://localhost:44337/".Trim();
-        private readonly HttpClient _httpClient;
+        //private readonly ILogger<HomeController> _logger;
+        //private readonly string _api = "https://localhost:44337/".Trim();
+        //private readonly HttpClient _httpClient;
 
-        public HomeController(ILogger<HomeController> logger, string api, HttpClient httpClient)
-        {
-            _logger = logger;
-            _api = api;
-            _httpClient = httpClient;
-        }
+        //public HomeController(ILogger<HomeController> logger, string api, HttpClient httpClient)
+        //{
+        //    _logger = logger;
+        //    _api = api;
+        //    _httpClient = httpClient;
+        //}
 
         //public async Task< IActionResult>Index()
         //{
@@ -67,6 +67,11 @@ namespace ControleDeMateriaisMVC.Controllers
         //        throw ex;
         //    }
         //}
+        public IActionResult Index()
+        {
+
+            return View();
+        }
 
         public IActionResult Privacy()
         { 

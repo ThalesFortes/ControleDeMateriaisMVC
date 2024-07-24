@@ -1,4 +1,4 @@
-﻿@model ControleDeMateriaisAPI.Models.Estoque
+﻿@model ControleDeMateriaisMVC.ViewModels.EstoqueViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -9,28 +9,36 @@
 <h4>Estoque</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md">
         <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Quantidade" class="control-label"></label>
-                <input asp-for="Quantidade" class="form-control" />
-                <span asp-validation-for="Quantidade" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DataCadastro" class="control-label"></label>
-                <input asp-for="DataCadastro" class="form-control" />
-                <span asp-validation-for="DataCadastro" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NotaFiscal" class="control-label"></label>
-                <input asp-for="NotaFiscal" class="form-control" />
-                <span asp-validation-for="NotaFiscal" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdProduto" class="control-label"></label>
-                <select asp-for="IdProduto" class ="form-control" asp-items="ViewBag.IdProduto"></select>
-            </div>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>      
+            <div>
+                <div class="card">
+                    <div class="card-hearder">Estoque</div>
+                        <div class="card-body">
+                        <div class="form-group">
+                            <label asp-for="Quantidade" class="control-label"></label>
+                            <input asp-for="Quantidade" class="form-control" />
+                            <span asp-validation-for="Quantidade" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="DataCadastro" class="control-label"></label>
+                            <input asp-for="DataCadastro" class="form-control" />
+                            <span asp-validation-for="DataCadastro" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="NotaFiscal" class="control-label"></label>
+                            <input asp-for="NotaFiscal" class="form-control" />
+                            <span asp-validation-for="NotaFiscal" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="IdProduto" class="control-label"></label>
+                            <select asp-for="IdProduto" class="form-control" asp-items="ViewBag.IdProduto"></select>
+                        </div>
+
+                        </div>                                   
+                </div>
+            </div>    
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

@@ -46,6 +46,22 @@ namespace ControleDeMateriaisAPI.Controllers
             }
         }
 
+        [HttpGet("/buscaEstoque/{idEstoque}")]
+        public async Task<ActionResult<Estoque>> ListaEstoque(int idEstoque)
+        {
+            try
+            {
+                var buscaEstoque = await _estoque.BuscaEstoquePorId(idEstoque);
+                return buscaEstoque;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+   
+
         [HttpPut ("/atualizarEstoque")]
         public async Task<bool> AtualizarEstoque (Estoque estoque)
         {

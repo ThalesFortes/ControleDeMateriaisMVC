@@ -1,208 +1,128 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Threading.Tasks;
+﻿using ControleDeMateriaisAPI.Models;
+using ControleDeMateriaisMVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using ControleDeMateriaisAPI.Data;
-using ControleDeMateriaisAPI.Models;
+using System.Text;
+using System.Text.Json;
 
-namespace ControleDeMateriaisMVC
+namespace ControleDeMateriaisMVC.Controllers
 {
     public class EstoqueController : Controller
     {
-        private readonly ControleDeMateriaisContext _context;
-        private readonly string _apiBaseUrl = "https://localhost:44337";
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly string _apiBaseUrl = "https://localhost:44337"; 
 
-        public EstoqueController(ControleDeMateriaisContext context)
+        public EstoqueController(IHttpClientFactory httpClientFactory)
         {
-            _context = context;
+            _httpClientFactory = httpClientFactory;
         }
-
-        // GET: Estoques
         public async Task<IActionResult> Index()
         {
-            using (var client = new HttpClient())
+            var client = _httpClientFactory.CreateClient();
+            var response = await client.GetAsync($"{_apiBaseUrl}/listaEstoque");
+
+            if (response.IsSuccessStatusCode)
             {
-                // Obter lista de Estoques da API
-                var response = await client.GetAsync($"{_apiBaseUrl}/listaEstoque");
-                if (response.IsSuccessStatusCode)
-                {
-                    var listaEstoque = await response.Content.ReadFromJsonAsync<List<Estoque>>();
-                    return View(listaEstoque);
-                }
-                else
-                {
-                    return StatusCode((int)response.StatusCode);
-                }
+                var listaEstoque = await response.Content.ReadFromJsonAsync<List<EstoqueViewModel>>();
+                return View(listaEstoque);
+            }
+            else
+            {
+                return Problem(statusCode: (int)response.StatusCode, title: "Error fetching stock items");
             }
         }
 
-        // GET: Estoques/Details/5
-        public async Task<IActionResult> Details(int? id)
+        [HttpGet]
+        public async Task<IActionResult> Create(Estoque estoque)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
-            }
+                var client = _httpClientFactory.CreateClient();
+                var serializedEstoque = JsonSerializer.Serialize(estoque);
+                var content = new StringContent(serializedEstoque, Encoding.UTF8, "application/json");
 
-            using (var client = new HttpClient())
-            {
-                // Obter detalhes do estoque da API
-                var response = await client.GetAsync($"{_apiBaseUrl}/estoque/{id}");
-                if (response.IsSuccessStatusCode)
-                {
-                    var estoque = await response.Content.ReadFromJsonAsync<Estoque>();
-                    return View(estoque);
-                }
-                else
-                {
-                    return StatusCode((int)response.StatusCode);
-                }
-            }
-        }
+                var response = await client.PostAsync($"{_apiBaseUrl}/cadastraEstoque", content);
 
-        // GET: Estoques/Create
-        public IActionResult Create()
-        {
-            ViewData["IdProduto"] = new SelectList(_context.Produtos, "IdProduto", "IdProduto");
-            return View();
-        }
-
-        // POST: Estoques/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdEstoque,Quantidade,DataCadastro,NotaFiscal,IdProduto")] Estoque estoque)
-        {
-            if (ModelState.IsValid)
-            {
-                using (var client = new HttpClient())
-                {
-                    // Criar novo estoque na API
-                    var response = await client.PostAsJsonAsync($"{_apiBaseUrl}/cadastraEstoque", estoque);
-                    if (response.IsSuccessStatusCode)
-                    {
-                        return RedirectToAction(nameof(Index));
-                    }
-                    else
-                    {
-                        return StatusCode((int)response.StatusCode);
-                    }
-                }
-            }
-            ViewData["IdProduto"] = new SelectList(_context.Produtos, "IdProduto", "IdProduto", estoque.IdProduto);
-            return View(estoque);
-        }
-
-        // GET: Estoques/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            using (var client = new HttpClient())
-            {
-                // Obter estoque da API para edição
-                var response = await client.GetAsync($"{_apiBaseUrl}/estoque/{id}");
-                if (response.IsSuccessStatusCode)
-                {
-                    var estoque = await response.Content.ReadFromJsonAsync<Estoque>();
-                    ViewData["IdProduto"] = new SelectList(_context.Produtos, "IdProduto", "IdProduto", estoque.IdProduto);
-                    return View(estoque);
-                }
-                else
-                {
-                    return StatusCode((int)response.StatusCode);
-                }
-            }
-        }
-
-        // POST: Estoques/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdEstoque,Quantidade,DataCadastro,NotaFiscal,IdProduto")] Estoque estoque)
-        {
-            if (id != estoque.IdEstoque)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                using (var client = new HttpClient())
-                {
-                    // Editar estoque na API
-                    var response = await client.PutAsJsonAsync($"{_apiBaseUrl}/estoque/{id}", estoque);
-                    if (response.IsSuccessStatusCode)
-                    {
-                        return RedirectToAction(nameof(Index));
-                    }
-                    else
-                    {
-                        return StatusCode((int)response.StatusCode);
-                    }
-                }
-            }
-            ViewData["IdProduto"] = new SelectList(_context.Produtos, "IdProduto", "IdProduto", estoque.IdProduto);
-            return View(estoque);
-        }
-
-        // GET: Estoques/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            using (var client = new HttpClient())
-            {
-                // Obter estoque da API para exclusão
-                var response = await client.GetAsync($"{_apiBaseUrl}/estoque/{id}");
-                if (response.IsSuccessStatusCode)
-                {
-                    var estoque = await response.Content.ReadFromJsonAsync<Estoque>();
-                    return View(estoque);
-                }
-                else
-                {
-                    return StatusCode((int)response.StatusCode);
-                }
-            }
-        }
-
-        // POST: Estoques/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            using (var client = new HttpClient())
-            {
-                // Excluir estoque na API
-                var response = await client.DeleteAsync($"{_apiBaseUrl}/estoque/{id}");
                 if (response.IsSuccessStatusCode)
                 {
                     return RedirectToAction(nameof(Index));
                 }
                 else
                 {
-                    return StatusCode((int)response.StatusCode);
+                    return Problem(statusCode: (int)response.StatusCode, title: "Error creating stock item");
                 }
+            }
+            catch (Exception ex)
+            {
+                return Problem(title: "Unexpected error creating stock item", detail: ex.Message);
             }
         }
 
-        private bool EstoqueExists(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            return _context.Estoques.Any(e => e.IdEstoque == id);
+            var client = _httpClientFactory.CreateClient();
+            var response = await client.GetAsync($"{_apiBaseUrl}//buscaEstoque/{id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var estoque = await response.Content.ReadFromJsonAsync<EstoqueViewModel>();
+                if (estoque != null)
+                {
+                    return View(estoque);
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            else
+            {
+                return Problem(statusCode: (int)response.StatusCode, title: "Error fetching stock item details");
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, Estoque estoque)
+        {
+            try
+            {
+                if (id != estoque.IdEstoque)
+                {
+                    return BadRequest("ID mismatch in request");
+                }
+
+                var client = _httpClientFactory.CreateClient();
+                var serializedEstoque = JsonSerializer.Serialize(estoque);
+                var content = new StringContent(serializedEstoque, Encoding.UTF8, "application/json");
+
+                var response = await client.PutAsync($"{_apiBaseUrl}/atualizarEstoque/{id}", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    return Problem(statusCode: (int)response.StatusCode, title: "Error updating stock item");
+                }
+            }
+            catch (Exception ex)
+            {
+                return Problem(title: "Unexpected error updating stock item", detail: ex.Message);
+            }
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            var response = await client.DeleteAsync($"{_apiBaseUrl}/deletarEstoque/{id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                return Problem(statusCode: (int)response.StatusCode, title: "Error deleting stock item");
+            }
         }
     }
 }

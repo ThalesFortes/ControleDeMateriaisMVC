@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddControllers();
+builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<ControleDeMateriaisContext>
     (options => options.UseSqlServer(builder.Configuration.GetSection("ConnectionStrings:DBSolicitacaoMateriais").Value));

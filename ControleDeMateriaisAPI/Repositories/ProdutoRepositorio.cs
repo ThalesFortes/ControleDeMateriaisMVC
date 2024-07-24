@@ -54,7 +54,6 @@ namespace ControleDeMateriaisAPI.Repositories
                 return false;
             }
         }
-
         public async Task<bool> DeletarProduto(Produto produto)
         {
             try

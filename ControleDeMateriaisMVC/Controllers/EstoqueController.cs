@@ -1,4 +1,5 @@
-﻿using ControleDeMateriaisAPI.Models;
+﻿using Azure;
+using ControleDeMateriaisAPI.Models;
 using ControleDeMateriaisMVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
@@ -27,11 +28,11 @@ namespace ControleDeMateriaisMVC.Controllers
             }
             else
             {
-                return Problem(statusCode: (int)response.StatusCode, title: "Error fetching stock items");
+                return Problem(statusCode: (int)response.StatusCode);
             }
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> Create(Estoque estoque)
         {
             try
@@ -48,12 +49,12 @@ namespace ControleDeMateriaisMVC.Controllers
                 }
                 else
                 {
-                    return Problem(statusCode: (int)response.StatusCode, title: "Error creating stock item");
+                    return Problem(statusCode: (int)response.StatusCode, title: "Erro");
                 }
             }
             catch (Exception ex)
             {
-                return Problem(title: "Unexpected error creating stock item", detail: ex.Message);
+                return Problem(title: "erro ", detail: ex.Message);
             }
         }
 
@@ -76,7 +77,7 @@ namespace ControleDeMateriaisMVC.Controllers
             }
             else
             {
-                return Problem(statusCode: (int)response.StatusCode, title: "Error fetching stock item details");
+                return Problem(statusCode: (int)response.StatusCode, title: "Erro");
             }
         }
         [HttpPost]
@@ -86,7 +87,7 @@ namespace ControleDeMateriaisMVC.Controllers
             {
                 if (id != estoque.IdEstoque)
                 {
-                    return BadRequest("ID mismatch in request");
+                    return BadRequest("Não encontrado");
                 }
 
                 var client = _httpClientFactory.CreateClient();
@@ -101,12 +102,12 @@ namespace ControleDeMateriaisMVC.Controllers
                 }
                 else
                 {
-                    return Problem(statusCode: (int)response.StatusCode, title: "Error updating stock item");
+                    return Problem(statusCode: (int)response.StatusCode, title: "Erro");
                 }
             }
             catch (Exception ex)
             {
-                return Problem(title: "Unexpected error updating stock item", detail: ex.Message);
+                return Problem(title: "error ", detail: ex.Message);
             }
         }
 
@@ -121,7 +122,7 @@ namespace ControleDeMateriaisMVC.Controllers
             }
             else
             {
-                return Problem(statusCode: (int)response.StatusCode, title: "Error deleting stock item");
+                return Problem(statusCode: (int)response.StatusCode);
             }
         }
     }

@@ -2,6 +2,7 @@ using ControleDeMateriaisAPI.Data;
 using ControleDeMateriaisAPI.Interfaces;
 using ControleDeMateriaisAPI.Models;
 using ControleDeMateriaisAPI.Repositories;
+using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -25,6 +26,14 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     
     app.UseHsts();
+}
+
+{
+    app.UseCors(x => x
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader());
+
 }
 
 

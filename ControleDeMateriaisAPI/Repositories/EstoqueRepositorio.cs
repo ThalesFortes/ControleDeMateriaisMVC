@@ -22,7 +22,7 @@ namespace ControleDeMateriaisAPI.Repositories
             var estoque = await _context.Estoques.FirstOrDefaultAsync(x => x.IdEstoque == idEstoque);
             return estoque;
         }
-        public async Task<bool> CadastrarEstoque(Estoque estoque)
+        public async Task<bool> AdicionarEstoque(Estoque estoque)
         {
             try
             {

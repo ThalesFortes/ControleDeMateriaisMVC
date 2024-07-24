@@ -36,7 +36,7 @@ namespace ControleDeMateriaisAPI.Controllers
         {
             try
             {
-                var adicionarEstoque = await _estoque.CadastrarEstoque(estoque);
+                var adicionarEstoque = await _estoque.AdicionarEstoque(estoque);
                 return adicionarEstoque;
             }
             catch

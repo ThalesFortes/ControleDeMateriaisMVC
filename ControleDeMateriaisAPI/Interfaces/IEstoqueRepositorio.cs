@@ -6,7 +6,7 @@ namespace ControleDeMateriaisAPI.Interfaces
     {
         Task<IEnumerable<Estoque>> ListaEstoque();
         Task<Estoque> BuscaEstoquePorId(int idEstoque);
-        Task<bool> CadastrarEstoque(Estoque estoque);
+        Task<bool> AdicionarEstoque(Estoque estoque);
         Task<bool> AtualizarEstoque(Estoque estoque);
         Task<bool> DeletarEstoque(Estoque estoque);
     }
